@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEATHER APP</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&family=DotGothic16&family=Outfit&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Bungee Spice', sans-serif;
+            font-family: 'DotGothic16', sans-serif;
+            font-family: 'Outfit', sans-serif;
+            color: white;
+        }
+
+        .countainer {
+            height: 100vh;
+            width: 100%;
+            background-color: #131313f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .box {
+            /* width: 50%; */
+            padding: 25px;
+            background-color: #0bc0bcb1;
+            border: 2px solid black;
+            border-radius: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .temp{
+            font-size: 40px;
+            margin-top: 10px;
+        }
+        .city{
+            font-size: 30px;
+        }
+        .humidity,
+        .wind {
+            display: inline-flex;
+        }
+        .box1{
+            display: flex;
+        }
+        #city{
+            font-size: 20px;
+            padding: 5px;
+            border: 1px solid rgba(86, 85, 85, 0.687);
+            border-radius: 15px;
+            color: black;
+        }
+        .btn{
+            font-size: 20px;
+            padding: 5px;
+            border: 1px solid rgba(86, 85, 85, 0.687);
+            border-radius: 15px;
+            color: black;
+        }
+        #humidity img{
+            height: 30px;
+            width: 30px;
+        }
+        #humidity h1{
+            font-size: 30px;
+        }
+        .detials{
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 20px;
+            margin-top: 50px;
+        }
+        .col{
+            display: flex;
+            align-items: center;
+            text-align: left;
+        }
+        .col img {
+            width: 40px;
+            margin: 10px;
+        }
+        .humidity, .wind{
+            font-size: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="countainer">
+        <div class="box">
+            <div class="box1">
+                <input type="text" id="city" placeholder="Enter city name...">
+                <button class="btn">GET</button>
+            </div>
+            <img class="img" src="./images/clouds.png" alt="">
+            <h1 class="temp">15 °F</h1>
+            <h2 class="city">OKARA</h2>
+            <div class="detials">
+                <div class="col">
+                    <img src="./images/humidity.png" alt="">
+                    <p class="humidity">20%</p> 
+                </div>
+                <div class="col">
+                    <img src="./images/wind.png" alt="">
+                    <p class="wind">20</p>
+                    <p>km/h</p>
+                </div>
+            </div>
+            <!-- <div id="humidity">
+                <h1 class="humidity">28%</h1>
+                <p class="wind"></p>
+            </div> -->
+        </div>
+    </div>
+    <script>
+        const apiKey = "cddbcd5987d75de940efca7abe53edde";
+        const url = "https://api.openweathermap.org/data/2.5/weather?&units=metric&q=";
+        const search = document.querySelector("#city")
+        const btn = document.querySelector(".btn");
+
+        const weatherIcon = document.querySelector(".img");
+
+        async function checkWeather(city) {
+            const responce = await fetch(url + city + `&appid=${apiKey}`);
+            var data = await responce.json();
+            console.log(data);
+
+            document.querySelector(".city").innerHTML = data.name;
+            document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°F";
+            document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+            document.querySelector(".wind").innerHTML = data.wind.speed;
+
+            if (data.weather[0].main == "Mist") {
+                weatherIcon.src = "images/mist.png";
+            }
+            else if (data.weather[0].main == "Clouds") {
+                weatherIcon.src = "images/clouds.png";
+            }
+            else if (data.weather[0].main == "Clear") {
+                weatherIcon.src = "images/clear.png";
+            }
+            else if (data.weather[0].main == "Drizzle") {
+                weatherIcon.src = "images/drizzle.png";
+            }
+            else if (data.weather[0].main == "Humidity") {
+                weatherIcon.src = "images/humidity.png";
+            }
+            else if (data.weather[0].main == "Rain") {
+                weatherIcon.src = "images/rain.png";
+            }
+            else if (data.weather[0].main == "Snow") {
+                weatherIcon.src = "images/snow.png";
+            }
+            else if (data.weather[0].main == "Wind") {
+                weatherIcon.src = "images/wind.png";
+            }
+
+        }
+        btn.addEventListener("click", () => {
+            checkWeather(search.value);
+        })
+    </script>
+</body>
+
+</html>
